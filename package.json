@@ -1,0 +1,37 @@
+{
+  "type": "module",
+  "name": "alc_server",
+  "version": "1.0.0",
+  "description": "Artificial life coach (back-end)",
+  "main": "index.js",
+  "engines": {
+    "node": "18.12.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roissi/ALC_server.git"
+  },
+  "keywords": [
+    "agenda",
+    "planning",
+    "OpenAI",
+    "GPT",
+    "Life coach",
+    "Panda.css"
+  ],
+  "author": "roissi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roissi/ALC_server/issues"
+  },
+  "homepage": "https://github.com/roissi/ALC_server#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "pg": "^8.11.3"
+  }
+}
