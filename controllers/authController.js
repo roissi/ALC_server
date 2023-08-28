@@ -3,26 +3,30 @@ import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import { ValidationError, AuthenticationError } from '../errors/customErrors.js';
 
+const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10');
+
 export const signUp = async (req, res) => {
   const { username, password, email } = req.body;
-
+  const trimmedUsername = username.trim();
+  const trimmedPassword = password.trim();
+  const trimmedEmail = email.trim();
+  
+  console.log('Reçu lors de l\'inscription:', trimmedUsername, trimmedPassword, trimmedEmail);
+  
   try {
-    // Vérifier si l'utilisateur existe déjà
-    const existingUser = await User.findOne({ where: { username } });
-
+    const existingUser = await User.findOne({ where: { username: trimmedUsername } });
+    
     if (existingUser) {
       throw new ValidationError('Le nom d\'utilisateur est déjà pris');
     }
-
-    // Hasher le mot de passe
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Créer un nouvel utilisateur
-    const newUser = await User.create({ username, password: hashedPassword, email });
-
-    // Générer un token JWT
+    
+    const hashedPassword = await bcrypt.hash(trimmedPassword, BCRYPT_SALT_ROUNDS);
+    console.log('Mot de passe haché:', hashedPassword);
+    
+    const newUser = await User.create({ username: trimmedUsername, password: hashedPassword, email: trimmedEmail });
     const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    
+    console.log('Token généré:', token);
     res.status(201).json({ token });
   } catch (error) {
     if (error instanceof ValidationError) {
@@ -36,28 +40,30 @@ export const signUp = async (req, res) => {
 
 export const logIn = async (req, res) => {
   const { username, password } = req.body;
-
-  console.log('Password from request:', password);
-  console.log('Hashed password from DB:', user.password);
-
+  const trimmedUsername = username.trim();
+  const trimmedPassword = password.trim();
+  
+  console.log('Reçu lors de la connexion:', trimmedUsername, trimmedPassword);
+  
   try {
-    // Trouver l'utilisateur dans la base de données
-    const user = await User.findOne({ where: { username } });
-
+    const user = await User.findOne({ where: { username: trimmedUsername } });
+    console.log('Utilisateur depuis la DB:', user);
+    
     if (!user) {
-      throw new AuthenticationError('Nom d\'utilisateur ou mot de passe incorrect');
+      throw new AuthenticationError('Username ou mot de passe incorrect');
     }
-
-    // Vérifier le mot de passe (vous devriez stocker les mots de passe hashés dans la base de données)
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
+    
+    console.log('Mot de passe haché depuis la DB:', user.password);
+    const isPasswordValid = await bcrypt.compare(trimmedPassword, user.password);
+    
+    console.log('Résultat de la comparaison:', isPasswordValid);
+    
     if (!isPasswordValid) {
-      throw new AuthenticationError('Nom d\'utilisateur ou mot de passe incorrect');
+      throw new AuthenticationError('Username ou mot de passe incorrect');
     }
-
-    // Générer un token JWT
+    
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    console.log('Token généré:', token);
     res.json({ token });
   } catch (error) {
     if (error instanceof AuthenticationError) {

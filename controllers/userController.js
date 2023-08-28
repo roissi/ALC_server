@@ -1,5 +1,9 @@
 import User from '../models/User.js';
 import { ValidationError } from '../errors/customErrors.js'; // Importer la classe d'erreur personnalisée
+import bcrypt from 'bcrypt';
+import Sequelize from 'sequelize';
+
+const BCRYPT_SALT_ROUNDS = 10;
 
 export const getUsers = async (req, res) => {
     try {
@@ -13,7 +17,10 @@ export const getUsers = async (req, res) => {
 
 export const createUser = async (req, res, next) => {
     try {
-        const user = await User.create(req.body);
+        const { username, password, email } = req.body;
+
+        const user = await User.create({ username, password, email });
+
         res.status(201).json(user);
     } catch (error) {
         console.error('Erreur lors de la création de l\'utilisateur:', error);
@@ -56,7 +63,7 @@ export const deleteUser = async (req, res, next) => {
         });
 
         if (deleted) {
-            return res.status(204).send("Utilisateur supprimé");
+            return res.status(204).json({ message: 'Utilisateur supprimé' });
         }
 
         throw new ValidationError('Utilisateur non trouvé'); // Utiliser l'erreur personnalisée

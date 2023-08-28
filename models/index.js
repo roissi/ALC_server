@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sequelize from '../data/database.js';
-import configFile from '../config/config.js';
+import configFile from '../config/dbConfig.js';
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -18,7 +18,10 @@ fs.readdirSync(__dirname)
   .forEach(file => {
     // Utilisation de require plutôt que d'import dynamique
     const modelModule = require(path.join(__dirname, file));
-    const model = modelModule.default.init(sequelize, sequelize.Sequelize); // Utilisez Sequelize de l'instance sequelize
+    console.log(sequelize)
+    console.log(modelModule)
+    const model = modelModule.default.init(sequelize, sequelize.Sequelize);
+    console.log('Initialized model:', model.name); // Utilisez Sequelize de l'instance sequelize
     db[model.name] = model;
   });
 

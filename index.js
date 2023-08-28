@@ -1,13 +1,26 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
+import cors from 'cors';
 import config from './config/appConfig.js';
 import router from './routes/router.js';
 import authRoutes from './routes/authRoutes.js'; // Importer les routes d'authentification
+import { conditionalAuthenticateJWT } from './middleware/conditionalAuthenticateJWT.js';
 import { AuthenticationError } from './errors/customErrors.js'; // Importer la classe d'erreur personnalisée
+
+const jwtSecret = process.env.JWT_SECRET;
+console.log('JWT_SECRET:', jwtSecret);
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:3000' // Permet uniquement les requêtes provenant de cette origine
+}));
+
 app.use(express.json()); // middleware pour parser les requêtes JSON
-app.use(router);
+app.use(conditionalAuthenticateJWT);
+app.use('/', router);
 app.use(authRoutes); // Ajouter les routes d'authentification à l'application
 
 // Middleware pour gérer les erreurs d'authentification
@@ -28,3 +41,5 @@ app.use((err, req, res, next) => {
 app.listen(config.PORT, () => {
   console.log(`Serveur écoutant sur le port ${config.PORT}`);
 });
+
+export default app;
