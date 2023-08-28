@@ -4,9 +4,9 @@ import { authenticateJWT } from '../middleware/authenticateJWT.js';
 
 const router = express.Router();
 
-router.get('/api/agendaEntry', authenticateJWT, agendaEntryController.getAgendaEntries);
-router.post('/api/agendaEntry', authenticateJWT, agendaEntryController.createAgendaEntry);
-router.put('/api/agendaEntry/:id', authenticateJWT, agendaEntryController.updateAgendaEntry);
-router.delete('/api/agendaEntry/:id', authenticateJWT, agendaEntryController.deleteAgendaEntry);
+router.get('/', authenticateJWT, agendaEntryController.getAgendaEntries);
+router.post('/', authenticateJWT, agendaEntryController.createAgendaEntry);
+router.put('/:id', authenticateJWT, agendaEntryController.updateAgendaEntry);
+router.delete('/:id', authenticateJWT, agendaEntryController.deleteAgendaEntry);
 
 export default router;

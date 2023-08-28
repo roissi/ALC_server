@@ -4,9 +4,9 @@ import { authenticateJWT } from '../middleware/authenticateJWT.js';
 
 const router = express.Router();
 
-router.get('/api/users', authenticateJWT, userController.getUsers);
-router.post('/api/users', authenticateJWT, userController.createUser);
-router.put('/api/users/:id', authenticateJWT, userController.updateUser);
-router.delete('/api/users/:id', authenticateJWT, userController.deleteUser);
+router.get('/', authenticateJWT, userController.getUsers);
+router.post('/', authenticateJWT, userController.createUser);
+router.put('/:id', authenticateJWT, userController.updateUser);
+router.delete('/:id', authenticateJWT, userController.deleteUser);
 
 export default router;

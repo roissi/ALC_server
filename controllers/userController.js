@@ -1,9 +1,6 @@
 import User from '../models/User.js';
 import { ValidationError } from '../errors/customErrors.js'; // Importer la classe d'erreur personnalisée
-import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
-
-const BCRYPT_SALT_ROUNDS = 10;
 
 export const getUsers = async (req, res) => {
     try {

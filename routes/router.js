@@ -3,12 +3,15 @@ import userRoutes from './userRoutes.js';
 import suggestionRoutes from './suggestionRoutes.js';
 import interestRoutes from './interestRoutes.js';
 import agendaEntryRoutes from './agendaEntryRoutes.js';
+import authRoutes from './authRoutes.js';
 
 const router = express.Router();
 
-router.use(userRoutes);
-router.use(suggestionRoutes);
-router.use(interestRoutes);
-router.use(agendaEntryRoutes);
+router.use('/api/users', userRoutes);
+router.use('/api/suggestion', suggestionRoutes);
+router.use('/api/interests', interestRoutes);
+router.use('/api/agendaEntry', agendaEntryRoutes);
+router.use('/api', authRoutes);
+router.use('/api', authRoutes);
 
 export default router;

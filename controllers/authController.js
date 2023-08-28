@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import bcrypt from 'bcrypt';
 import { ValidationError, AuthenticationError } from '../errors/customErrors.js';
 
-const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10');
 
 export const signUp = async (req, res) => {
   const { username, password, email } = req.body;
@@ -19,11 +17,9 @@ export const signUp = async (req, res) => {
     if (existingUser) {
       throw new ValidationError('Le nom d\'utilisateur est déjà pris');
     }
+
     
-    const hashedPassword = await bcrypt.hash(trimmedPassword, BCRYPT_SALT_ROUNDS);
-    console.log('Mot de passe haché:', hashedPassword);
-    
-    const newUser = await User.create({ username: trimmedUsername, password: hashedPassword, email: trimmedEmail });
+    const newUser = await User.create({ username: trimmedUsername, password: trimmedPassword, email: trimmedEmail });
     const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
     console.log('Token généré:', token);
@@ -52,15 +48,10 @@ export const logIn = async (req, res) => {
     if (!user) {
       throw new AuthenticationError('Username ou mot de passe incorrect');
     }
-    
-    console.log('Mot de passe haché depuis la DB:', user.password);
-    const isPasswordValid = await bcrypt.compare(trimmedPassword, user.password);
-    
-    console.log('Résultat de la comparaison:', isPasswordValid);
-    
-    if (!isPasswordValid) {
-      throw new AuthenticationError('Username ou mot de passe incorrect');
-    }
+
+     if (trimmedPassword !== user.password) {
+    throw new AuthenticationError('Username ou mot de passe incorrect');
+  }
     
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     console.log('Token généré:', token);
