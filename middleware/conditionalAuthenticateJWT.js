@@ -1,5 +1,5 @@
 // conditionalAuthenticateJWT.js
-import { authenticateJWT } from './authenticateJWT.js'; // Ajustez ce chemin selon votre structure de fichiers
+import { authenticateJWT } from './authenticateJWT.js';
 
 export const conditionalAuthenticateJWT = (req, res, next) => {
   const publicPaths = ['/api/signup', '/api/login'];

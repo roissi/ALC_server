@@ -18,11 +18,13 @@ fs.readdirSync(__dirname)
   .forEach(file => {
     // Utilisation de require plutôt que d'import dynamique
     const modelModule = require(path.join(__dirname, file));
-    console.log(sequelize)
-    console.log(modelModule)
-    const model = modelModule.default.init(sequelize, sequelize.Sequelize);
-    console.log('Initialized model:', model.name); // Utilisez Sequelize de l'instance sequelize
-    db[model.name] = model;
+
+    if (modelModule.default && typeof modelModule.default.init === 'function') {
+      const model = modelModule.default.init(sequelize, sequelize.Sequelize);
+      db[model.name] = model;
+    } else {
+      console.warn(`Skipping ${file} as it does not seem to export a valid Sequelize model.`);
+    }
   });
 
 Object.keys(db).forEach(modelName => {
@@ -32,6 +34,6 @@ Object.keys(db).forEach(modelName => {
 });
 
 db.sequelize = sequelize;
-db.Sequelize = sequelize.Sequelize; // Utilisez Sequelize de l'instance sequelize
+db.Sequelize = sequelize.Sequelize;
 
 export default db;

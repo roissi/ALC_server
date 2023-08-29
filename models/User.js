@@ -1,8 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../data/database.js';
+import bcrypt from 'bcrypt';
 
 const INVALID_EMAIL_MSG = 'Email format invalide';
-// Vous pouvez ajouter d'autres messages d'erreur ici
+const SALT_ROUNDS = 10;
 
 class User extends Model {
 }
@@ -15,8 +16,8 @@ User.init({
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false
-    // Vous pouvez ajouter des validateurs de complexité ici
+    allowNull: false,
+    // Ajoutez des validateurs de complexité ici, si nécessaire
   },
   email: {
     type: DataTypes.STRING,
@@ -35,6 +36,16 @@ User.init({
   timestamps: true,
   underscored: true,
   hooks: {
+    beforeCreate: async (user) => {
+      const salt = await bcrypt.genSalt(SALT_ROUNDS);
+      user.password = await bcrypt.hash(user.password, salt);
+    },
+    beforeUpdate: async (user) => {
+      if (user.changed('password')) {
+        const salt = await bcrypt.genSalt(SALT_ROUNDS);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
+    }
   }
 });
 
