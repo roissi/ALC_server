@@ -1,9 +1,6 @@
 import User from '../models/User.js';
-import { ValidationError } from '../errors/customErrors.js'; // Importer la classe d'erreur personnalisée
-import bcrypt from 'bcrypt';
+import { ValidationError } from '../errors/customErrors.js';
 import Sequelize from 'sequelize';
-
-const BCRYPT_SALT_ROUNDS = 10;
 
 export const getUsers = async (req, res) => {
     try {
@@ -18,7 +15,6 @@ export const getUsers = async (req, res) => {
 export const createUser = async (req, res, next) => {
     try {
         const { username, password, email } = req.body;
-
         const user = await User.create({ username, password, email });
 
         res.status(201).json(user);
@@ -36,19 +32,17 @@ export const updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
         const user = await User.findOne({ where: { id: id } });
-
         if (!user) {
-            throw new ValidationError('Utilisateur non trouvé'); // Utiliser l'erreur personnalisée
+            throw new ValidationError('Utilisateur non trouvé');
         }
-
-        user.set(req.body); // Met à jour les attributs de l'utilisateur
-        await user.save(); // Sauvegarde l'utilisateur, déclenche le hook beforeUpdate
+        user.set(req.body);
+        await user.save();
 
         return res.status(200).json({ user: user });
     } catch (error) {
         console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
         if (error instanceof ValidationError) {
-            next(error); // Passez l'erreur personnalisée au gestionnaire d'erreurs global
+            next(error);
         } else {
             res.status(500).json({ error: 'Erreur du serveur' });
         }
@@ -65,12 +59,11 @@ export const deleteUser = async (req, res, next) => {
         if (deleted) {
             return res.status(204).json({ message: 'Utilisateur supprimé' });
         }
-
-        throw new ValidationError('Utilisateur non trouvé'); // Utiliser l'erreur personnalisée
+        throw new ValidationError('Utilisateur non trouvé');
     } catch (error) {
         console.error('Erreur lors de la suppression de l\'utilisateur:', error);
         if (error instanceof ValidationError) {
-            next(error); // Passez l'erreur personnalisée au gestionnaire d'erreurs global
+            next(error);
         } else {
             res.status(500).json({ error: 'Erreur du serveur' });
         }

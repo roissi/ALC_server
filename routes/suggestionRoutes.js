@@ -4,10 +4,10 @@ import { authenticateJWT } from '../middleware/authenticateJWT.js';
 
 const router = express.Router();
 
-router.get('/api/suggestion', authenticateJWT, suggestionController.getSuggestions);
-router.post('/api/suggestion/openai', authenticateJWT, suggestionController.getSuggestionFromOpenAI); // Route ajoutée ici
-router.post('/api/suggestion', authenticateJWT, suggestionController.createSuggestion);
-router.put('/api/suggestion/:id', authenticateJWT, suggestionController.updateSuggestion);
-router.delete('/api/suggestion/:id', authenticateJWT, suggestionController.deleteSuggestion);
+router.get('/', authenticateJWT, suggestionController.getSuggestions);
+router.post('/openai', authenticateJWT, suggestionController.getSuggestionFromOpenAI); // Route du coach !
+router.post('/', authenticateJWT, suggestionController.createSuggestion);
+router.put('/:id', authenticateJWT, suggestionController.updateSuggestion);
+router.delete('/:id', authenticateJWT, suggestionController.deleteSuggestion);
 
 export default router;

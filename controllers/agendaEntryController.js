@@ -4,7 +4,7 @@ import { ValidationError } from '../errors/customErrors.js';
 export const getAgendaEntries = async (req, res) => {
     try {
         const agendaEntries = await AgendaEntry.findAll({
-            where: { user_id: req.user.userId } // Filtrer par l'ID de l'utilisateur
+            where: { user_id: req.user.userId }
         });
         res.json(agendaEntries);
     } catch (error) {
@@ -15,14 +15,13 @@ export const getAgendaEntries = async (req, res) => {
 
 export const createAgendaEntry = async (req, res) => {
     try {
-        // Validation des données d'entrée
-        if (!req.body.title || !req.body.date) { // Supposons que le titre et la date soient obligatoires
+        if (!req.body.title || !req.body.date) {
             throw new ValidationError('Le titre et la date sont obligatoires');
         }
 
         const agendaEntryData = {
             ...req.body,
-            user_id: req.user.userId // Ajout de l'ID de l'utilisateur à partir de la demande
+            user_id: req.user.userId
         };
         const agendaEntry = await AgendaEntry.create(agendaEntryData);
         res.status(201).json(agendaEntry);
@@ -38,8 +37,7 @@ export const createAgendaEntry = async (req, res) => {
 
 export const updateAgendaEntry = async (req, res) => {
     try {
-        // Validation des données d'entrée
-        if (!req.body.title && !req.body.date) { // Vérifiez que l'une des propriétés au moins est fournie
+        if (!req.body.title && !req.body.date) {
             throw new ValidationError('Au moins le titre ou la date doivent être fournis');
         }
 
@@ -67,20 +65,15 @@ export const updateAgendaEntry = async (req, res) => {
 export const deleteAgendaEntry = async (req, res) => {
     try {
         const { id } = req.params;
-        
-        // Vérification de l'ID
         if (!id) {
             return res.status(400).json({ error: 'L\'ID de l\'entrée d\'agenda est requis' });
         }
-
         const deleted = await AgendaEntry.destroy({
-            where: { id: id, user_id: req.user.userId } // Assurer que l'entrée appartient à l'utilisateur
+            where: { id: id, user_id: req.user.userId }
         });
-
         if (deleted) {
             return res.status(204).send("Entrée d'agenda supprimée");
         }
-
         throw new Error('Entrée d\'agenda non trouvée');
     } catch (error) {
         console.error('Erreur lors de la suppression de l\'entrée d\'agenda:', error);

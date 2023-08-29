@@ -1,16 +1,22 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js'; // Assurez-vous que ce chemin est correct
+import User from '../models/User.js';
 import { AuthenticationError } from '../errors/customErrors.js';
 
 export const authenticateJWT = async (req, res, next) => {
   const authHeader = req.header('Authorization');
 
+  // S'il n'y a pas de header d'autorisation, l'accès est refusé
   if (!authHeader) {
-    // S'il n'y a pas de header d'autorisation, l'accès est refusé
-    throw new AuthenticationError('Access Denied');
+    return next(new AuthenticationError('Access Denied'));
   }
 
-  const token = authHeader.split(' ')[1]; // Prend le token après "Bearer "
+  // Vérifie si le header d'autorisation commence par "Bearer "
+  if (!authHeader.startsWith("Bearer ")) {
+    return next(new AuthenticationError('Invalid authorization format. Expected "Bearer <token>"'));
+  }
+
+  // Prend le token après "Bearer "
+  const token = authHeader.split(' ')[1];
 
   try {
     // Vérifie le token
@@ -20,15 +26,13 @@ export const authenticateJWT = async (req, res, next) => {
     const user = await User.findOne({ where: { id: verified.userId } });
 
     if (!user) {
-      // Si l'utilisateur n'est pas trouvé, lance une erreur
-      throw new AuthenticationError('User not found');
+      return next(new AuthenticationError('User not found'));
     }
 
     // Attache l'utilisateur trouvé à req.user pour les middlewares suivants
     req.user = user;
     next();
   } catch (error) {
-    // Si la vérification du token échoue, lance une erreur
-    throw new AuthenticationError('Invalid Token');
+    next(new AuthenticationError('Invalid Token'));
   }
 };
