@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js'; // Assurez-vous que ce chemin est correct
+import User from '../models/User.js';
 import { AuthenticationError } from '../errors/customErrors.js';
 
 export const authenticateJWT = async (req, res, next) => {
@@ -25,7 +25,6 @@ export const authenticateJWT = async (req, res, next) => {
     // Cherche l'utilisateur en utilisant le 'id' du token vérifié
     const user = await User.findOne({ where: { id: verified.userId } });
 
-    // Si l'utilisateur n'est pas trouvé, lance une erreur
     if (!user) {
       return next(new AuthenticationError('User not found'));
     }
@@ -34,7 +33,6 @@ export const authenticateJWT = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    // Si la vérification du token échoue, lance une erreur
     next(new AuthenticationError('Invalid Token'));
   }
 };

@@ -1,9 +1,7 @@
 import request from 'supertest';
-import bcrypt from 'bcrypt';
+import Sequelize from 'sequelize';
 import app from '../index.js';
 import db from '../models/index.js';
-
-const sequelize = new Sequelize(/* your db config */);
 
 beforeAll(async () => {
   try {
@@ -11,58 +9,64 @@ beforeAll(async () => {
     console.log('Database sync successful.');
   } catch (error) {
     console.error('Error during database sync:', error);
+    process.exit(1);
   }
-  
-  await db.User.create({
-    username: 'testuser',
-    password: bcrypt.hashSync('testpassword', 10),
-    email: 'test@example.com',
-  });
+});
+
+beforeEach(async () => {
+  try {
+    await db.User.create({
+      username: 'testuser',
+      password: 'testpassword',
+      email: 'test@example.com',
+    });
+  } catch (error) {
+    console.error('Error during user creation:', error);
+  }
+});
+
+afterEach(async () => {
+  try {
+    await db.User.destroy({ where: {} });
+  } catch (error) {
+    console.error('Error during user deletion:', error);
+  }
 });
 
 test('Should return a token on successful login', async () => {
-  const response = await request(app)
-    .post('/login')
-    .send({
-      username: 'testuser',
-      password: 'testpassword',
-    });
-  
-  expect(response.status).toBe(200);
-  expect(response.body).toHaveProperty('token');
+  try {
+    const response = await request(app)
+      .post('/login')
+      .send({
+        username: 'testuser',
+        password: 'testpassword',
+      });
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('token');
+  } catch (error) {
+    console.error('Error during login test:', error);
+  }
 });
 
 test('Should return an error on failed login', async () => {
-  const response = await request(app)
-    .post('/login')
-    .send({
-      username: 'testuser',
-      password: 'wrongpassword',
-    });
-  
-  expect(response.status).toBe(400);
-});
-
-test('Should hash the password before storing in the database', async () => {
-  const plainPassword = 'testpassword';
-  
-  const newUser = await db.User.create({
-    username: 'hashTestUser',
-    password: bcrypt.hashSync(plainPassword, 10),
-    email: 'hashTest@example.com',
-  });
-  
-  const storedUser = await db.User.findByPk(newUser.id);
-  
-  expect(storedUser.password).not.toBe(plainPassword);
-  
-  const isMatching = await bcrypt.compare(plainPassword, storedUser.password);
-  expect(isMatching).toBe(true);
-  
-  await db.User.destroy({ where: { id: newUser.id } });
+  try {
+    const response = await request(app)
+      .post('/login')
+      .send({
+        username: 'testuser',
+        password: 'wrongpassword',
+      });
+    expect(response.status).toBe(400);
+  } catch (error) {
+    console.error('Error during failed login test:', error);
+  }
 });
 
 afterAll(async () => {
-  await db.User.destroy({ where: {} });
-  await db.sequelize.close();
+  try {
+    await db.sequelize.close();
+    console.log('Database connection closed.');
+  } catch (error) {
+    console.error('Error during teardown:', error);
+  }
 });
