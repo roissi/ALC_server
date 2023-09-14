@@ -5,7 +5,6 @@ import express from 'express';
 import cors from 'cors';
 import config from './config/appConfig.js';
 import router from './routes/router.js';
-import authRoutes from './routes/authRoutes.js';
 import { conditionalAuthenticateJWT } from './middleware/conditionalAuthenticateJWT.js';
 import { errorHandler } from './errors/errorHandler.js';
 
@@ -18,7 +17,6 @@ app.use(cors({
 app.use(express.json());
 app.use(conditionalAuthenticateJWT);
 app.use('/', router);
-app.use(authRoutes);
 
 app.use(errorHandler);
 

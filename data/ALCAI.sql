@@ -42,9 +42,9 @@ CREATE TABLE "agenda_entries" (
     "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES "users"("id") ON DELETE CASCADE,
     "title" TEXT NOT NULL,
+    "day" TEXT,
+    "hour" INTEGER,
     "description" TEXT,
-    "start_time" TIMESTAMP NOT NULL,
-    "end_time" TIMESTAMP NOT NULL,
     "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
     "updated_at" TEXT
 );

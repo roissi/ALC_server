@@ -2,27 +2,39 @@ import AgendaEntry from '../models/AgendaEntry.js';
 import { ValidationError } from '../errors/customErrors.js';
 
 export const getAgendaEntries = async (req, res) => {
-    try {
-        const agendaEntries = await AgendaEntry.findAll({
-            where: { user_id: req.user.userId }
-        });
-        res.json(agendaEntries);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des entrées d\'agenda:', error);
-        res.status(500).json({ error: 'Erreur du serveur' });
+  
+    // Vérifie si l'utilisateur est authentifié
+    if (!req.userId) {
+      return res.status(401).json({ message: 'Non autorisé' });
     }
-};
+  
+    try {
+      const agendaEntries = await AgendaEntry.findAll({
+        where: { user_id: req.userId }
+      });
+  
+      res.json(agendaEntries);
+    } catch (error) {
+      // Log pour imprimer l'erreur
+      console.error('Erreur lors de la récupération des entrées d\'agenda:', error);
+      res.status(500).json({ error: 'Erreur du serveur' });
+    }
+  };
 
 export const createAgendaEntry = async (req, res) => {
     try {
-        if (!req.body.title || !req.body.date) {
-            throw new ValidationError('Le titre et la date sont obligatoires');
+        if (!req.body.title) {
+            throw new ValidationError('Le titre est obligatoire');
         }
 
         const agendaEntryData = {
-            ...req.body,
-            user_id: req.user.userId
+            title: req.body.title,
+            description: req.body.description,
+            day: req.body.day,
+            hour: req.body.hour,
+            user_id: req.userId
         };
+
         const agendaEntry = await AgendaEntry.create(agendaEntryData);
         res.status(201).json(agendaEntry);
     } catch (error) {
@@ -37,13 +49,22 @@ export const createAgendaEntry = async (req, res) => {
 
 export const updateAgendaEntry = async (req, res) => {
     try {
-        if (!req.body.title && !req.body.date) {
-            throw new ValidationError('Au moins le titre ou la date doivent être fournis');
+        if (!req.body.title) {
+            throw new ValidationError('Le titre doit être fourni');
         }
 
         const { id } = req.params;
-        const [updated] = await AgendaEntry.update(req.body, {
-            where: { id: id, user_id: req.user.userId }
+
+        const agendaEntryData = {
+            title: req.body.title,
+            description: req.body.description,
+            day: req.body.day,
+            hour: req.body.hour,
+            user_id: req.userId
+        };
+
+        const [updated] = await AgendaEntry.update(agendaEntryData, {
+            where: { id: id, user_id: req.userId }
         });
 
         if (updated) {
@@ -68,8 +89,9 @@ export const deleteAgendaEntry = async (req, res) => {
         if (!id) {
             return res.status(400).json({ error: 'L\'ID de l\'entrée d\'agenda est requis' });
         }
+
         const deleted = await AgendaEntry.destroy({
-            where: { id: id, user_id: req.user.userId }
+            where: { id: id, user_id: req.userId }
         });
         if (deleted) {
             return res.status(204).send("Entrée d'agenda supprimée");

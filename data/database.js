@@ -18,7 +18,7 @@ async function initializeDatabase() {
     console.log('Connexion à la base de données établie avec succès.');
   } catch (err) {
     console.error('Impossible de se connecter à la base de données:', err);
-    process.exit(1); // Arrête l'exécution du programme
+    process.exit(1);
   }
 }
 

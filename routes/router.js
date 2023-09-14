@@ -10,8 +10,7 @@ const router = express.Router();
 router.use('/api/users', userRoutes);
 router.use('/api/suggestion', suggestionRoutes);
 router.use('/api/interests', interestRoutes);
-router.use('/api/agendaEntry', agendaEntryRoutes);
-router.use('/api', authRoutes);
+router.use('/api/agenda-entry', agendaEntryRoutes);
 router.use('/api', authRoutes);
 
 export default router;

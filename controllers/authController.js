@@ -41,6 +41,9 @@ export const logIn = async (req, res) => {
       throw new AuthenticationError('Username ou mot de passe incorrect');
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Ajouter ce log pour voir le token lors de la connexion
+    console.log("Generated Token on LogIn:", token);
     
     res.json({ token });
   } catch (error) {

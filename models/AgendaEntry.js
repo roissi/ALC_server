@@ -16,14 +16,15 @@ AgendaEntry.init({
     allowNull: false
   },
   description: DataTypes.TEXT,
-  start_time: {
-    type: DataTypes.DATE,
+  day: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  end_time: {
-    type: DataTypes.DATE,
+  hour: {
+    type: DataTypes.INTEGER,
     allowNull: false
-  }
+  },
+
 }, {
   sequelize,
   modelName: 'agenda_entry',
