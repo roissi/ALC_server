@@ -24,6 +24,7 @@ CREATE TABLE "users" (
 CREATE TABLE "interests" (
     "id" SERIAL PRIMARY KEY,
     "name" TEXT NOT NULL UNIQUE,
+    "type" TEXT NOT NULL CHECK(type IN ('Interest', 'Need')), -- Ajouté cette colonne
     "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
     "updated_at" TEXT
 );
@@ -32,7 +33,7 @@ CREATE TABLE "user_interests" (
     "user_id" INTEGER REFERENCES "users"("id") ON DELETE CASCADE,
     "interest_id" INTEGER REFERENCES "interests"("id") ON DELETE CASCADE,
     "is_permanent" BOOLEAN NOT NULL,
-    "duration" INTEGER, -- la durée peut être en jours, semaines ou mois selon votre application
+    "duration" INTEGER, -- la durée peut être en jours, semaines ou mois
     "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
     "updated_at" TEXT,
     PRIMARY KEY ("user_id", "interest_id")

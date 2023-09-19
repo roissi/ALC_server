@@ -3,7 +3,14 @@ import { ValidationError } from '../errors/customErrors.js';
 
 export const getInterests = async (req, res) => {
     try {
-        const interests = await Interest.findAll();
+        const { type } = req.query;
+        const conditions = {};
+
+        if (type) {
+            conditions.type = type;
+        }
+
+        const interests = await Interest.findAll({ where: conditions });
         res.json(interests);
     } catch (error) {
         console.error('Erreur lors de la récupération des intérêts:', error);
@@ -13,7 +20,7 @@ export const getInterests = async (req, res) => {
 
 export const createInterest = async (req, res) => {
     try {
-        if (!req.body.name) {
+        if (!req.body.name || !req.body.type) {
             throw new ValidationError('Le nom est obligatoire');
         }
         const interest = await Interest.create(req.body);

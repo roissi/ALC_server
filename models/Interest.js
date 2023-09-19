@@ -8,6 +8,10 @@ Interest.init({
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
+  },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   sequelize,
