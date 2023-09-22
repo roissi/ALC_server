@@ -16,7 +16,7 @@ export const signUp = async (req, res) => {
     const newUser = await User.create({ username: trimmedUsername, password: password.trim(), email: trimmedEmail });
     const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
-    res.status(201).json({ token });
+    res.status(201).json({ token, userId: newUser.id });
   } catch (error) {
     if (error instanceof ValidationError) {
       res.status(400).json({ error: error.message });
@@ -45,7 +45,7 @@ export const logIn = async (req, res) => {
     // Ajouter ce log pour voir le token lors de la connexion
     console.log("Generated Token on LogIn:", token);
     
-    res.json({ token });
+    res.json({ token, userId: user.id });
   } catch (error) {
     if (error instanceof AuthenticationError) {
       res.status(400).json({ error: error.message });
