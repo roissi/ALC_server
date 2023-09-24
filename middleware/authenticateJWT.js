@@ -4,8 +4,14 @@ import { AuthenticationError } from '../errors/customErrors.js';
 
 export const authenticateJWT = async (req, res, next) => {
   const authHeader = req.header('Authorization');
+  const path = req.path;
 
   console.log("Received Authorization Header:", authHeader);
+
+    // Si l'utilisateur tente d'accéder à '/api/interests' sans authentification, laissez-le passer
+  if (!authHeader && path === '/api/interests') {
+    return next();
+  }
 
   if (!authHeader) {
     return next(new AuthenticationError('Access Denied'));
