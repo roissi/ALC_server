@@ -11,6 +11,13 @@ AgendaEntry.init({
       key: 'id'
     }
   },
+  suggestion_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'gpt_suggestions',
+      key: 'id'
+    }
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: false
@@ -35,6 +42,9 @@ AgendaEntry.init({
 AgendaEntry.associate = function(models) {
   AgendaEntry.belongsTo(models.User, {
     foreignKey: 'user_id'
+  });
+  AgendaEntry.belongsTo(models.GPTSuggestion, {
+    foreignKey: 'suggestion_id'
   });
 };
 
