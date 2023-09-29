@@ -32,7 +32,8 @@ export const createAgendaEntry = async (req, res) => {
             description: req.body.description,
             day: req.body.day,
             hour: req.body.hour,
-            user_id: req.userId
+            user_id: req.userId,
+            suggestion_id: req.body.suggestion_id // peut être null
         };
 
         const agendaEntry = await AgendaEntry.create(agendaEntryData);
@@ -60,7 +61,8 @@ export const updateAgendaEntry = async (req, res) => {
             description: req.body.description,
             day: req.body.day,
             hour: req.body.hour,
-            user_id: req.userId
+            user_id: req.userId,
+            suggestion_id: req.body.suggestion_id // peut être null
         };
 
         const [updated] = await AgendaEntry.update(agendaEntryData, {

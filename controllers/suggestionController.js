@@ -9,7 +9,7 @@ export const getSuggestionFromOpenAI = async (req, res) => {
 
         const suggestionData = {
             suggestion_text: suggestionText,
-            user_id: req.user.userId
+            user_id: req.userId
         };
         const suggestion = await GPTSuggestion.create(suggestionData);
 
@@ -23,7 +23,7 @@ export const getSuggestionFromOpenAI = async (req, res) => {
 export const getSuggestions = async (req, res) => {
     try {
         const suggestions = await GPTSuggestion.findAll({
-            where: { user_id: req.user.userId }
+            where: { user_id: req.userId }
         });
         res.json(suggestions);
     } catch (error) {
@@ -36,7 +36,7 @@ export const createSuggestion = async (req, res) => {
     try {
         const suggestionData = {
             ...req.body,
-            user_id: req.user.userId
+            user_id: req.userId
         };
         const suggestion = await GPTSuggestion.create(suggestionData);
         res.status(201).json(suggestion);
