@@ -21,11 +21,15 @@ export const getAgendaEntries = async (req, res) => {
     }
   };
 
-export const createAgendaEntry = async (req, res) => {
+  export const createAgendaEntry = async (req, res) => {
     try {
-        if (!req.body.title) {
-            throw new ValidationError('Le titre est obligatoire');
-        }
+      // Log pour imprimer les valeurs reçues
+      console.log('Requête reçue pour créer une entrée d\'agenda:', req.body);
+  
+      // Vérifications des champs
+      if (!req.body.title || !req.body.day || !req.body.hour) {
+        throw new ValidationError('Le titre, le jour et l\'heure sont obligatoires');
+      }
 
         const agendaEntryData = {
             title: req.body.title,

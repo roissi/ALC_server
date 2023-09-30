@@ -15,6 +15,15 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Middleware de logging général
+app.use((req, res, next) => {
+  console.log('Une requête a été reçue');
+  console.log('URL:', req.url);
+  console.log('Méthode:', req.method);
+  next();
+});
+
 app.use(conditionalAuthenticateJWT);
 app.use('/', router);
 

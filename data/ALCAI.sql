@@ -46,6 +46,7 @@ CREATE TABLE "agenda_entries" (
     "day" TEXT,
     "hour" INTEGER,
     "description" TEXT,
+    "suggestion_id" INTEGER REFERENCES "gpt_suggestions"("id") ON DELETE CASCADE,
     "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
     "updated_at" TEXT
 );
