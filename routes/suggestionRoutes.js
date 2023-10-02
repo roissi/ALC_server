@@ -8,5 +8,6 @@ router.post('/openai', suggestionController.getSuggestionFromOpenAI); // Route d
 router.post('/', suggestionController.createSuggestion);
 router.put('/:id', suggestionController.updateSuggestion);
 router.delete('/:id', suggestionController.deleteSuggestion);
+router.put('/markAsAdded/:id', suggestionController.markSuggestionAsAddedToAgenda);
 
 export default router;

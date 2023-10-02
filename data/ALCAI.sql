@@ -55,6 +55,7 @@ CREATE TABLE "gpt_suggestions" (
     "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES "users"("id") ON DELETE CASCADE,
     "suggestion_text" TEXT NOT NULL,
+    "is_added_to_agenda" BOOLEAN DEFAULT FALSE,
     "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
     "updated_at" TEXT
 );

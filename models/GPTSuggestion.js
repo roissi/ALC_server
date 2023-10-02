@@ -14,6 +14,11 @@ GPTSuggestion.init({
   suggestion_text: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  is_added_to_agenda: { // Ajout de la nouvelle colonne
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
   }
 }, {
   sequelize,

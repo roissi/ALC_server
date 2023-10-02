@@ -30,7 +30,17 @@ export const addSuggestionToAgenda = async (req, res) => {
       day: req.body.day,
       hour: req.body.hour,
     });
-    console.log(req.body.day, req.body.hour);
+
+    // Marquer la suggestion comme ajoutée à l'agenda
+    const [updated] = await GPTSuggestion.update({ is_added_to_agenda: true }, {
+      where: { id: suggestionId }
+    });
+
+    if (!updated) {
+      // Gérer l'erreur si la mise à jour de la suggestion échoue
+      console.error('Échec de la mise à jour de la suggestion');
+      return res.status(500).json({ message: 'Échec de la mise à jour de la suggestion' });
+    }
 
     // Répondre avec succès
     res.status(200).json(newEntry);
