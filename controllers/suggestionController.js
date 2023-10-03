@@ -63,6 +63,23 @@ export const markSuggestionAsAddedToAgenda = async (req, res) => {
     }
 };
 
+export const markSuggestionAsRemovedToAgenda = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [updated] = await GPTSuggestion.update({ is_added_to_agenda: false }, {
+            where: { id: id }
+        });
+        if (updated) {
+            const markSuggestionAsRemovedToAgenda = await GPTSuggestion.findOne({ where: { id: id } });
+            return res.status(200).json({ suggestion: markSuggestionAsRemovedToAgenda });
+        }
+        throw new ValidationError('Suggestion non trouvée');
+    } catch (error) {
+        console.error('Erreur lors du marquage de la suggestion:', error);
+        res.status(500).json({ error: 'Erreur du serveur' });
+    }
+};
+
 export const updateSuggestion = async (req, res) => {
     try {
         const { id } = req.params;
