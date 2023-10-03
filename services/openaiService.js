@@ -11,10 +11,11 @@ const openai = new OpenAI({
  */
 async function getGPT4Response(promptText) {
   try {
+    const concisePrompt = `${promptText} (Réponse en 100 caractères max.)`;
     const gpt4Response = await openai.completions.create({
       model: 'text-davinci-003',
-      prompt: promptText,
-      max_tokens: 150
+      prompt: concisePrompt,
+      max_tokens: 100
     });
     return gpt4Response.choices[0].text.trim();
   } catch (error) {
