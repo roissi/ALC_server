@@ -1,16 +1,16 @@
 export default {
     development: {
-      username: process.env.DB_USER || 'defaultUser',
+      username: process.env.DB_USER || 'roissi',
       password: null,
-      database: process.env.DB_NAME || 'defaultDb',
+      database: process.env.DB_NAME || 'alcai',
       host: 'localhost',
       port: 5432,
       dialect: 'postgres'
     },
     test: {
-      username: process.env.DB_USER || 'defaultUser',
+      username: process.env.DB_USER || 'roissi',
       password: null,
-      database: process.env.DB_NAME || 'defaultDb',
+      database: process.env.DB_NAME || 'alcai',
       host: 'localhost',
       port: 5432,
       dialect: 'postgres'

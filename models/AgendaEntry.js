@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../data/database.js';
 
 class AgendaEntry extends Model {}
 
+const initializeAgendaEntry = (sequelize, db) => {
 AgendaEntry.init({
   user_id: {
     type: DataTypes.INTEGER,
@@ -47,5 +47,7 @@ AgendaEntry.associate = function(models) {
     foreignKey: 'suggestion_id'
   });
 };
+db['AgendaEntry'] = AgendaEntry;
+}
 
-export default AgendaEntry;
+export { AgendaEntry, initializeAgendaEntry };

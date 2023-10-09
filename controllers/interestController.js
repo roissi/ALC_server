@@ -1,4 +1,4 @@
-import Interest from '../models/Interest.js';
+import { Interest } from '../models/Interest.js';
 import { ValidationError } from '../errors/customErrors.js';
 
 export const getInterests = async (req, res) => {

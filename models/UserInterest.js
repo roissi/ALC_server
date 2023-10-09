@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../data/database.js';
 
 class UserInterest extends Model {}
 
+const initializeUserInterest = (sequelize, db) => {
 UserInterest.init({
   user_id: {
     type: DataTypes.INTEGER,
@@ -28,11 +28,13 @@ UserInterest.init({
 }, {
   sequelize,
   modelName: 'user_interest',
+  tableName: 'user_interests',
   timestamps: true,
   underscored: true
 });
 
 UserInterest.associate = function(models) {
+  console.log("Models in UserInterest:", models);
   UserInterest.belongsTo(models.User, {
     foreignKey: 'user_id'
   });
@@ -41,5 +43,7 @@ UserInterest.associate = function(models) {
     foreignKey: 'interest_id'
   });
 };
+db['UserInterest'] = UserInterest;
+}
 
-export default UserInterest;
+export { UserInterest, initializeUserInterest };

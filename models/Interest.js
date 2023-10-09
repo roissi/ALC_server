@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../data/database.js';
 
 class Interest extends Model {}
 
+const initializeInterest = (sequelize, db) => {
 Interest.init({
   name: {
     type: DataTypes.STRING,
@@ -27,5 +27,7 @@ Interest.associate = function(models) {
     onDelete: 'CASCADE'
   });
 };
+db['Interest'] = Interest;
+}
 
-export default Interest;
+export { Interest, initializeInterest };

@@ -20,7 +20,7 @@ async function getGPT4Response(promptText) {
     return gpt4Response.choices[0].text.trim();
   } catch (error) {
     console.error("Erreur lors de l'appel à OpenAI:", error);
-    throw error; // ou tu peux retourner une réponse d'erreur personnalisée
+    throw error;
   }
 }
 

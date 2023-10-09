@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import User from '../models/User.js';
+import { User } from '../models/User.js';
 import { ValidationError, AuthenticationError } from '../errors/customErrors.js';
 
 export const signUp = async (req, res) => {
@@ -42,7 +42,7 @@ export const logIn = async (req, res) => {
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Ajouter ce log pour voir le token lors de la connexion
+    // Pour voir le token lors de la connexion
     console.log("Generated Token on LogIn:", token);
     
     res.json({ token, userId: user.id });

@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import { User } from '../models/User.js';
 import { ValidationError } from '../errors/customErrors.js';
 import Sequelize from 'sequelize';
 

@@ -5,6 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import config from './config/appConfig.js';
 import router from './routes/router.js';
+import { initializeDatabase, initializeModels } from './models/index.js';
 import { conditionalAuthenticateJWT } from './middleware/conditionalAuthenticateJWT.js';
 import { errorHandler } from './errors/errorHandler.js';
 
@@ -15,6 +16,17 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+async function start() {
+  console.log("Initializing database...");
+  await initializeDatabase();
+  console.log("Database initialized");
+
+  console.log("Initializing models...");
+  await initializeModels();
+  console.log("Models initialized");
+}
+start();
 
 // Middleware de logging général
 app.use((req, res, next) => {

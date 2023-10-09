@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../data/database.js';
 
 class GPTSuggestion extends Model {}
 
+const initializeGPTSuggestion = (sequelize, db) => {
 GPTSuggestion.init({
   user_id: {
     type: DataTypes.INTEGER,
@@ -15,7 +15,7 @@ GPTSuggestion.init({
     type: DataTypes.STRING,
     allowNull: false
   },
-  is_added_to_agenda: { // Ajout de la nouvelle colonne
+  is_added_to_agenda: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: false
@@ -33,5 +33,7 @@ GPTSuggestion.associate = function(models) {
     foreignKey: 'user_id'
   });
 };
+db['GPTSuggestion'] = GPTSuggestion;
+}
 
-export default GPTSuggestion;
+export { GPTSuggestion, initializeGPTSuggestion };

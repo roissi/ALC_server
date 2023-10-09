@@ -1,4 +1,4 @@
-import AgendaEntry from '../models/AgendaEntry.js';
+import { AgendaEntry } from '../models/AgendaEntry.js';
 import { ValidationError } from '../errors/customErrors.js';
 
 export const getAgendaEntries = async (req, res) => {
@@ -15,7 +15,6 @@ export const getAgendaEntries = async (req, res) => {
   
       res.json(agendaEntries);
     } catch (error) {
-      // Log pour imprimer l'erreur
       console.error('Erreur lors de la récupération des entrées d\'agenda:', error);
       res.status(500).json({ error: 'Erreur du serveur' });
     }
@@ -23,7 +22,6 @@ export const getAgendaEntries = async (req, res) => {
 
   export const createAgendaEntry = async (req, res) => {
     try {
-      // Log pour imprimer les valeurs reçues
       console.log('Requête reçue pour créer une entrée d\'agenda:', req.body);
   
       // Vérifications des champs
