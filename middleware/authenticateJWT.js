@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import { User } from '../models/User.js';
 import { AuthenticationError } from '../errors/customErrors.js';
 
 export const authenticateJWT = async (req, res, next) => {

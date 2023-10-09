@@ -1,39 +1,73 @@
-import fs from 'fs';
-import path from 'path';
-import sequelize from '../data/database.js';
+import { DataTypes, Sequelize } from 'sequelize';
 import configFile from '../config/dbConfig.js';
 
-const basename = path.basename(__filename);
+import {initializeUser } from './User.js';
+import {initializeInterest } from './Interest.js';
+import {initializeUserInterest } from './UserInterest.js';
+import {initializeAgendaEntry } from '../models/AgendaEntry.js';
+import {initializeGPTSuggestion } from './GPTSuggestion.js';
+
 const env = process.env.NODE_ENV || 'development';
 const config = configFile[env];
+
+// Initialisation de l'instance Sequelize
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    ...config,
+  });
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    ...config,
+  });
+}
+
+// Fonction pour initialiser la base de données
+export async function initializeDatabase() {
+  try {
+    await sequelize.authenticate();
+    console.log('Connexion à la base de données établie avec succès.');
+
+    await sequelize.sync();
+    console.log('Synchronisation de la base de données réussie.');
+
+  } catch (err) {
+    console.error('Impossible de se connecter à la base de données:', err);
+    process.exit(1);
+  }
+}
+
 const db = {};
 
-fs.readdirSync(__dirname)
-  .filter(file => (
-    file.indexOf('.') !== 0 &&
-    file !== basename &&
-    file.slice(-3) === '.js' &&
-    file.indexOf('.test.js') === -1
-  ))
-  .forEach(file => {
-    // Utilisation de require plutôt que d'import dynamique
-    const modelModule = require(path.join(__dirname, file));
+export async function initializeModels() {
+  try {
+    console.log("Étape 0: Début de l'initialisation des modèles");
 
-    if (modelModule.default && typeof modelModule.default.init === 'function') {
-      const model = modelModule.default.init(sequelize, sequelize.Sequelize);
-      db[model.name] = model;
-    } else {
-      console.warn(`Skipping ${file} as it does not seem to export a valid Sequelize model.`);
+    // Étape 1: Initialisation des modèles
+    initializeUser(sequelize, db);
+    initializeInterest(sequelize, db);
+    initializeUserInterest(sequelize, db);
+    initializeAgendaEntry(sequelize, db);
+    initializeGPTSuggestion(sequelize, db);
+
+    // Étape 2: Association des modèles
+    console.log('Étape 2: Association des modèles');
+    for (const model of Object.values(db)) {
+      if (model.associate) {
+        console.log(`Association du modèle ${model.name}`);
+        model.associate(db);
+        console.log(`Modèle ${model.name} associé`);
+      }
     }
-  });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+    console.log("Fin de l'initialisation des modèles");
+
+    db.sequelize = sequelize;
+    db.Sequelize = Sequelize;
+
+  } catch (error) {
+    console.error('An error occurred:', error);
   }
-});
+}
 
-db.sequelize = sequelize;
-db.Sequelize = sequelize.Sequelize;
-
-export default db;
+export { sequelize };

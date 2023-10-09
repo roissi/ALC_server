@@ -1,11 +1,21 @@
-import GPTSuggestion from '../models/GPTSuggestion.js';
+import { getUserInterests, getUserNeeds, createOpenAIPromptWithContext } from '../services/userContextService.js';
+import { GPTSuggestion } from '../models/GPTSuggestion.js';
 import openaiService from '../services/openaiService.js';
 import { ValidationError } from '../errors/customErrors.js';
 
 export const getSuggestionFromOpenAI = async (req, res) => {
     try {
+        const userId = req.userId;
         const promptText = req.body.prompt;
-        const suggestionText = await openaiService.getGPT4Response(promptText);
+
+        // Récupération des intérêts et des besoins
+        const interests = await getUserInterests(userId);
+        const needs = await getUserNeeds(userId);
+
+        // Création du prompt enrichi
+        const enrichedPrompt = createOpenAIPromptWithContext(promptText, interests, needs);
+
+        const suggestionText = await openaiService.getGPT4Response(enrichedPrompt);
 
         const suggestionData = {
             suggestion_text: suggestionText,
