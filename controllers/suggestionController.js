@@ -6,16 +6,21 @@ import { ValidationError } from '../errors/customErrors.js';
 export const getSuggestionFromOpenAI = async (req, res) => {
     try {
         const userId = req.userId;
+        console.log("UserID de suggestionController 1:", userId);
         const promptText = req.body.prompt;
 
         // Récupération des intérêts et des besoins
         const interests = await getUserInterests(userId);
         const needs = await getUserNeeds(userId);
+        console.log("Intérêts de l'utilisateur:", interests);
+        console.log("Besoins de l'utilisateur:", needs);
 
         // Création du prompt enrichi
         const enrichedPrompt = createOpenAIPromptWithContext(promptText, interests, needs);
+        console.log("Prompt enrichi:", enrichedPrompt);
 
-        const suggestionText = await openaiService.getGPT4Response(enrichedPrompt);
+        const suggestionText = await openaiService.getGPT4Response(userId);
+        console.log("Texte de la suggestion:", suggestionText);
 
         const suggestionData = {
             suggestion_text: suggestionText,
