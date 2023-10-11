@@ -4,7 +4,7 @@ import configFile from '../config/dbConfig.js';
 import {initializeUser } from './User.js';
 import {initializeInterest } from './Interest.js';
 import {initializeUserInterest } from './UserInterest.js';
-import {initializeAgendaEntry } from '../models/AgendaEntry.js';
+import {initializeAgendaEntry } from './AgendaEntry.js';
 import {initializeGPTSuggestion } from './GPTSuggestion.js';
 
 const env = process.env.NODE_ENV || 'development';
@@ -15,10 +15,12 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     ...config,
+    logging: console.log
   });
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     ...config,
+    logging: console.log
   });
 }
 
