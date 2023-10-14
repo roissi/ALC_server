@@ -5,7 +5,8 @@
   "description": "Artificial life coach (back-end)",
   "main": "index.js",
   "engines": {
-    "node": "18.12.1"
+    "node": "18.12.1",
+    "npm": "8.19.2"
   },
   "scripts": {
     "start": "node index.js",

@@ -39,6 +39,15 @@ CREATE TABLE "user_interests" (
     PRIMARY KEY ("user_id", "interest_id")
 );
 
+CREATE TABLE "gpt_suggestions" (
+    "id" SERIAL PRIMARY KEY,
+    "user_id" INTEGER REFERENCES "users"("id") ON DELETE CASCADE,
+    "suggestion_text" TEXT NOT NULL,
+    "is_added_to_agenda" BOOLEAN DEFAULT FALSE,
+    "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
+    "updated_at" TEXT
+);
+
 CREATE TABLE "agenda_entries" (
     "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES "users"("id") ON DELETE CASCADE,
@@ -47,15 +56,6 @@ CREATE TABLE "agenda_entries" (
     "hour" INTEGER,
     "description" TEXT,
     "suggestion_id" INTEGER REFERENCES "gpt_suggestions"("id") ON DELETE CASCADE,
-    "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
-    "updated_at" TEXT
-);
-
-CREATE TABLE "gpt_suggestions" (
-    "id" SERIAL PRIMARY KEY,
-    "user_id" INTEGER REFERENCES "users"("id") ON DELETE CASCADE,
-    "suggestion_text" TEXT NOT NULL,
-    "is_added_to_agenda" BOOLEAN DEFAULT FALSE,
     "created_at" TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Paris', 'DD-MM-YYYY HH24:MI:SS'),
     "updated_at" TEXT
 );

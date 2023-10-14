@@ -12,7 +12,12 @@ const config = configFile[env];
 
 // Initialisation de l'instance Sequelize
 let sequelize;
-if (config.use_env_variable) {
+if (config.url) {  // vérifie si config.url est défini
+  sequelize = new Sequelize(config.url, {  // utilisez config.url pour configurer Sequelize
+    ...config,
+    logging: console.log
+  });
+} else if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     ...config,
     logging: console.log
