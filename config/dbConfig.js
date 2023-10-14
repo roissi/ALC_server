@@ -16,6 +16,7 @@ export default {
       dialect: 'postgres'
     },
     production: {
+      url: process.env.DATABASE_URL,
       username: process.env.DB_USER || 'defaultUser',
       password: null,
       database: process.env.DB_NAME || 'defaultDb',
