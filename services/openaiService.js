@@ -1,5 +1,4 @@
 import OpenAI from 'openai';
-import { getUserInterests, getUserNeeds, createOpenAIPromptWithContext } from './userContextService.js';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
@@ -10,18 +9,9 @@ const openai = new OpenAI({
  * @param {string} promptText - Le texte d'invite pour GPT-4
  * @returns {Promise<string>} La réponse de GPT-4
  */
-async function getGPT4Response(userId) {
-  console.log("Appel de getGPT4Response avec userId:", userId);
+async function getGPT4Response(enrichedPrompt) {
   try {
-    const userInterests = await getUserInterests(userId);
-    const userNeeds = await getUserNeeds(userId); 
-
-    const basePrompt = "Suggérez une activité pour quelqu'un qui est intéressé par ";
-    const interestPrompt = userInterests.join(' et ') + " et qui a besoin de se concentrer sur la " + userNeeds.join(' et ') + ".";
-
-    const fullPrompt = createOpenAIPromptWithContext(basePrompt + interestPrompt, userInterests, userNeeds);
-
-    const concisePrompt = `${fullPrompt} (Réponse en 100 caractères max.)`;
+    const concisePrompt = `${enrichedPrompt} (Réponse en 100 caractères max.)`;
     const gpt4Response = await openai.completions.create({
       model: 'text-davinci-003',
       prompt: concisePrompt,

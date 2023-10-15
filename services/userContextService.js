@@ -39,8 +39,6 @@ export const getUserNeeds = async (userId) => {
 };
 
 export const createOpenAIPromptWithContext = (promptText, interests, needs) => {
-    const interestsStr = interests.join(", ");
-    const needsStr = needs.join(", ");
-    
-    return `${promptText}\nInterests: ${interestsStr}\nNeeds: ${needsStr}`;
+ const fullPrompt = `L'utilisateur demande : '${promptText}'. Suggérez une activité pour quelqu'un qui est aussi intéressé par ${interests.join(' et ')} et qui a actuellement besoin de ${needs[0]}`;
+    return fullPrompt;
 };

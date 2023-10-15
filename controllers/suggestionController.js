@@ -19,7 +19,7 @@ export const getSuggestionFromOpenAI = async (req, res) => {
         const enrichedPrompt = createOpenAIPromptWithContext(promptText, interests, needs);
         console.log("Prompt enrichi:", enrichedPrompt);
 
-        const suggestionText = await openaiService.getGPT4Response(userId);
+        const suggestionText = await openaiService.getGPT4Response(enrichedPrompt, userId);
         console.log("Texte de la suggestion:", suggestionText);
 
         const suggestionData = {
