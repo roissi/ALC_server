@@ -11,7 +11,7 @@ const openai = new OpenAI({
  */
 async function getGPT4Response(enrichedPrompt) {
   try {
-    const concisePrompt = `${enrichedPrompt} (Réponse en 100 caractères max.)`;
+    const concisePrompt = `${enrichedPrompt} (Donnez une réponse complète et significative en 150 caractères maximum.)`;
     const gpt4Response = await openai.completions.create({
       model: 'text-davinci-003',
       prompt: concisePrompt,

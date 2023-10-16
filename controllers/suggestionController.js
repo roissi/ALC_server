@@ -12,8 +12,6 @@ export const getSuggestionFromOpenAI = async (req, res) => {
         // Récupération des intérêts et des besoins
         const interests = await getUserInterests(userId);
         const needs = await getUserNeeds(userId);
-        console.log("Intérêts de l'utilisateur:", interests);
-        console.log("Besoins de l'utilisateur:", needs);
 
         // Création du prompt enrichi
         const enrichedPrompt = createOpenAIPromptWithContext(promptText, interests, needs);
