@@ -12,7 +12,7 @@ import { errorHandler } from './errors/errorHandler.js';
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: ['http://localhost:3000', 'https://artificial-life-coach.vercel.app']
 }));
 
 app.use(express.json());
