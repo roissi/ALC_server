@@ -42,7 +42,7 @@ export const logIn = async (req, res) => {
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Pour voir le token lors de la connexion
+    // Je veux voir le token lors de la connexion
     console.log("Generated Token on LogIn:", token);
     
     res.json({ token, userId: user.id });

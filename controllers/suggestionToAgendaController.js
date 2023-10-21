@@ -4,12 +4,8 @@ import { GPTSuggestion } from '../models/GPTSuggestion.js';
 export const addSuggestionToAgenda = async (req, res) => {
   try {
     const { userId, suggestionId } = req.body;
-    console.log('req.body:', req.body);
-    console.log('userId:', userId);
-    console.log('suggestionId:', suggestionId);
 
     if (!userId || !suggestionId) {
-      console.log('Condition not met:', userId, suggestionId);
       return res.status(400).json({ message: "userId et suggestionId sont requis" });
     }
 

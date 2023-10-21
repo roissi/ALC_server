@@ -34,7 +34,6 @@ UserInterest.init({
 });
 
 UserInterest.associate = function(models) {
-  console.log("Models in UserInterest:", models);
   UserInterest.belongsTo(models.User, {
     foreignKey: 'user_id'
   });

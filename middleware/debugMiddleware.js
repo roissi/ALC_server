@@ -2,16 +2,11 @@ import * as suggestionToAgendaController from '../controllers/suggestionToAgenda
 
 const router = express.Router();
 
-// ... autres routes
-
-// Middleware de logging
 router.post('/add-suggestion', (req, res, next) => {
   console.log('Request reached /api/agenda-entry/add-suggestion');
   console.log('Request Method:', req.method);
   console.log('Request Body:', req.body);
-  next();  // Passe au prochain middleware ou contrôleur
+  next();
 }, suggestionToAgendaController.addSuggestionToAgenda);
-
-// ... autres routes
 
 export default router;

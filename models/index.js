@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize';
 import configFile from '../config/dbConfig.js';
 
 import {initializeUser } from './User.js';
@@ -10,10 +10,9 @@ import {initializeGPTSuggestion } from './GPTSuggestion.js';
 const env = process.env.NODE_ENV || 'development';
 const config = configFile[env];
 
-// Initialisation de l'instance Sequelize
 let sequelize;
-if (config.url) {  // vérifie si config.url est défini
-  sequelize = new Sequelize(config.url, {  // utilisez config.url pour configurer Sequelize
+if (config.url) {
+  sequelize = new Sequelize(config.url, {
     ...config,
     logging: console.log
   });
@@ -29,7 +28,6 @@ if (config.url) {  // vérifie si config.url est défini
   });
 }
 
-// Fonction pour initialiser la base de données
 export async function initializeDatabase() {
   try {
     await sequelize.authenticate();

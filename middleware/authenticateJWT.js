@@ -8,7 +8,7 @@ export const authenticateJWT = async (req, res, next) => {
 
   console.log("Received Authorization Header:", authHeader);
 
-    // Si l'utilisateur tente d'accéder à '/api/interests' sans authentification, laissez-le passer
+    // Si l'utilisateur tente d'accéder à '/api/interests' sans authentification, je laisse passer
   if (!authHeader && path === '/api/interests') {
     return next();
   }
@@ -37,7 +37,6 @@ export const authenticateJWT = async (req, res, next) => {
     
     next();
   } catch (error) {
-    // Log pour imprimer l'erreur
     console.log("JWT Verification Error:", error);
     next(new AuthenticationError('Invalid Token'));
   }

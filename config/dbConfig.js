@@ -37,7 +37,7 @@ export default {
     dialect: 'postgres',
     logging: false,
     pool: {
-      max: 5, // Vous pouvez ajuster cette valeur en fonction des limitations de votre hébergeur de base de données
+      max: 5,
       min: 0,
       idle: 10000,
       acquire: 30000

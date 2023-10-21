@@ -41,11 +41,10 @@ app.use('/', router);
 
 app.use(errorHandler);
 
-// N'écoutez sur un port que si nous ne sommes pas dans un environnement de test
-const PORT = process.env.PORT || config.PORT || 4500;  // Modification ici
+const PORT = process.env.PORT || config.PORT || 4500;
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {  // Et ici
-    console.log(`Serveur écoutant sur le port ${PORT}`);  // Et ici
+  app.listen(PORT, () => {
+    console.log(`Serveur écoutant sur le port ${PORT}`);
   });
 }
 

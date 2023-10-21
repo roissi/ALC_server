@@ -17,7 +17,7 @@ const initializeUser = (sequelize, db) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      // Ajouter des validateurs de complexité ici, si nécessaire
+      // Ajout de validateur de complexité ici ??? A voir...
     },
     email: {
       type: DataTypes.STRING,

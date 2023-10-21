@@ -12,5 +12,4 @@ class ValidationError extends Error {
     }
   }
   
-  // Exportez-les pour les utiliser dans d'autres parties de l'application
   export { ValidationError, AuthenticationError };

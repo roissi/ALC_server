@@ -2,7 +2,6 @@ import { UserInterest } from '../models/UserInterest.js';
 import { Interest } from '../models/Interest.js';
 
 export const getUserInterests = async (userId) => {
-    console.log("Calling getUserInterests with userId:", userId);
     const interests = await UserInterest.findAll({
         where: { user_id: userId },
         logging: console.log,
@@ -21,7 +20,6 @@ export const getUserInterests = async (userId) => {
 };
 
 export const getUserNeeds = async (userId) => {
-    console.log("Calling getUserNeeds with userId:", userId);
     const needs = await UserInterest.findAll({
         where: { user_id: userId },
         include: {
