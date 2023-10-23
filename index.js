@@ -18,21 +18,13 @@ app.use(cors({
 app.use(express.json());
 
 async function start() {
-  console.log("Initializing database...");
   await initializeDatabase();
-  console.log("Database initialized");
-
-  console.log("Initializing models...");
   await initializeModels();
-  console.log("Models initialized");
 }
 start();
 
 // Middleware de logging général
 app.use((req, res, next) => {
-  console.log('Une requête a été reçue');
-  console.log('URL:', req.url);
-  console.log('Méthode:', req.method);
   next();
 });
 
