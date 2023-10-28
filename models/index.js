@@ -1,43 +1,42 @@
-import { Sequelize } from 'sequelize';
-import configFile from '../config/dbConfig.js';
+import { Sequelize } from "sequelize";
+import configFile from "../config/dbConfig.js";
 
-import {initializeUser } from './User.js';
-import {initializeInterest } from './Interest.js';
-import {initializeUserInterest } from './UserInterest.js';
-import {initializeAgendaEntry } from './AgendaEntry.js';
-import {initializeGPTSuggestion } from './GPTSuggestion.js';
+import { initializeUser } from "./User.js";
+import { initializeInterest } from "./Interest.js";
+import { initializeUserInterest } from "./UserInterest.js";
+import { initializeAgendaEntry } from "./AgendaEntry.js";
+import { initializeGPTSuggestion } from "./GPTSuggestion.js";
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || "development";
 const config = configFile[env];
 
 let sequelize;
 if (config.url) {
   sequelize = new Sequelize(config.url, {
     ...config,
-    logging: console.log
+    logging: console.log,
   });
 } else if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     ...config,
-    logging: console.log
+    logging: console.log,
   });
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     ...config,
-    logging: console.log
+    logging: console.log,
   });
 }
 
 export async function initializeDatabase() {
   try {
     await sequelize.authenticate();
-    console.log('Connexion à la base de données établie avec succès.');
+    console.log("Connexion à la base de données établie avec succès.");
 
     await sequelize.sync();
-    console.log('Synchronisation de la base de données réussie.');
-
+    console.log("Synchronisation de la base de données réussie.");
   } catch (err) {
-    console.error('Impossible de se connecter à la base de données:', err);
+    console.error("Impossible de se connecter à la base de données:", err);
     process.exit(1);
   }
 }
@@ -56,7 +55,7 @@ export async function initializeModels() {
     initializeGPTSuggestion(sequelize, db);
 
     // Étape 2: Association des modèles
-    console.log('Étape 2: Association des modèles');
+    console.log("Étape 2: Association des modèles");
     for (const model of Object.values(db)) {
       if (model.associate) {
         console.log(`Association du modèle ${model.name}`);
@@ -69,9 +68,8 @@ export async function initializeModels() {
 
     db.sequelize = sequelize;
     db.Sequelize = Sequelize;
-
   } catch (error) {
-    console.error('An error occurred:', error);
+    console.error("An error occurred:", error);
   }
 }
 

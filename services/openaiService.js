@@ -1,7 +1,7 @@
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 /**
@@ -13,9 +13,9 @@ async function getGPT4Response(enrichedPrompt) {
   try {
     const concisePrompt = `${enrichedPrompt} (Donnez une réponse complète et significative en 150 caractères maximum.)`;
     const gpt4Response = await openai.completions.create({
-      model: 'text-davinci-003',
+      model: "text-davinci-003",
       prompt: concisePrompt,
-      max_tokens: 100
+      max_tokens: 100,
     });
     return gpt4Response.choices[0].text.trim();
   } catch (error) {
@@ -25,5 +25,5 @@ async function getGPT4Response(enrichedPrompt) {
 }
 
 export default {
-  getGPT4Response
+  getGPT4Response,
 };
