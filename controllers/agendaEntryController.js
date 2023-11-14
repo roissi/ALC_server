@@ -24,8 +24,7 @@ export const getAgendaEntries = async (req, res) => {
 export const createAgendaEntry = async (req, res) => {
   try {
     console.log("Requête reçue pour créer une entrée d'agenda:", req.body);
-
-    if (!req.body.title || !req.body.day || !req.body.hour) {
+    if (!req.body.title || !req.body.day || req.body.hour === undefined) {
       throw new ValidationError(
         "Le titre, le jour et l'heure sont obligatoires",
       );
@@ -54,6 +53,10 @@ export const createAgendaEntry = async (req, res) => {
 
 export const updateAgendaEntry = async (req, res) => {
   try {
+    console.log(
+      "Requête reçue pour mettre à jour une entrée d'agenda:",
+      req.body,
+    );
     if (!req.body.title) {
       throw new ValidationError("Le titre doit être fourni");
     }
